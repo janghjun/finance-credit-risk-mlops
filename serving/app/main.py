@@ -14,7 +14,8 @@ class Profile(BaseModel):
     region: Literal["capital", "noncapital"]
     loan_type: Literal["credit", "mortgage"]
     rate_type: Literal["variable", "fixed"]
-
+    exposure_ratio: Optional[float] = None   # corporate용 (0~1)
+    guarantee_ratio: Optional[float] = None  # sme용 (0~1)
 
 class Candidate(BaseModel):
     issuer: str

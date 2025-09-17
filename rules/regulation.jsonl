@@ -1,2 +1,4 @@
 {"rule_id":"KR.DSR.STRESS.V1","type":"STRESS_DSR","version":"1.0","effective_from":"2025-07-01","expires_on":null,"payload":{"dsr_limit":0.40,"stress_spread_capital":0.0150,"stress_spread_noncapital":0.0075,"noncapital_relief_expires":"2025-12-31","credit_line_threshold":100000000}}
 {"rule_id":"KR.LEX.V1","type":"LEX","version":"1.0","effective_from":"2024-02-01","expires_on":null,"payload":{"single_counterparty_limit":0.25,"group_limit":0.15}}
+{"rule_id":"KR.LEX.V1","type":"LEX","version":"1.0","effective_from":"2024-02-01","expires_on":null,"payload":{"single_counterparty_limit":0.25,"group_limit":0.15}}
+{"rule_id":"KR.SME.GUARANTEE.V1","type":"SME_GUARANTEE","version":"1.0","effective_from":"2024-01-01","expires_on":null,"payload":{"max_guarantee_ratio":0.85,"max_guarantee_amount":100000000}}

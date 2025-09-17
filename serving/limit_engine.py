@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import json
 from pathlib import Path
 import math
@@ -23,6 +23,9 @@ class Profile:
     region: str  # "capital" | "noncapital"
     loan_type: str  # "credit" | "mortgage"
     rate_type: str  # "variable" | "fixed"
+
+    exposure_ratio: Optional[float] = None  # corporate용 (0~1)
+    guarantee_ratio: Optional[float] = None  # sme용 (0~1)
 
 
 @dataclass
@@ -142,6 +145,7 @@ def compute_offers(
     as_of: str, profile: Dict[str, Any], candidates: List[Dict[str, Any]]
 ) -> Dict[str, Any]:
     pr = Profile(**profile)
+    rules_all = load_jsonl(RULES / "regulation.jsonl")
     offers = []
     for c in candidates:
         pol = pick_issuer_policy(c["issuer"], c["product"], pr.score_band)
@@ -151,14 +155,36 @@ def compute_offers(
         r_limit = regulation_limit(pr, as_of, tenor, base_apr)
         p_limit = policy_limit(pol, pr.score_band)
         m_limit = model_limit(pr)
+        base_final = min(r_limit, p_limit, m_limit)
 
-        final = min(r_limit, p_limit, m_limit)
+        # --- NEW: segment post-processing ---
+        seg = profile.get("segment", "personal")
+        final = base_final
+        seg_reasons = []
+
+        if seg == "corporate":
+            exposure_ratio = float(
+                profile.get("exposure_ratio", 0.10)
+            )  # 입력 없으면 보수적으로 10%
+            adjusted = apply_lex_limit(base_final, exposure_ratio, rules_all)
+            if adjusted == 0 and base_final > 0:
+                seg_reasons.append(
+                    f"LEX 한도 위반: exposure_ratio={exposure_ratio:.2f}"
+                )
+            final = min(final, adjusted)
+
+        elif seg == "sme":
+            guarantee_ratio = float(profile.get("guarantee_ratio", 0.0))  # 0~1
+            final = apply_sme_guarantee(final, guarantee_ratio, rules_all)
+            seg_reasons.append(f"SME 보증 적용: guarantee_ratio={guarantee_ratio:.2f}")
 
         reasons = [
-            f"스트레스 DSR 적용, 금리 가산 고려(base {base_apr:.3f}, spread 적용)",
+            f"스트레스 DSR 적용(base APR {base_apr:.3f})",
             f"발급사 정책 limit_factor {pol['policy']['limit_factor']}",
-            f"모형(PD={pr.pd:.2f}) 한도 반영",
+            f"모형(PD={pr.pd:.2f}) 반영",
+            *seg_reasons,
         ]
+
         offers.append(
             {
                 "issuer": c["issuer"],
@@ -175,3 +201,25 @@ def compute_offers(
 
     best = max(offers, key=lambda x: x["limits"]["final_limit"]) if offers else None
     return {"offers": offers, "best_offer": best}
+
+
+def apply_lex_limit(base_limit: int, exposure_ratio: float, rules: list[dict]) -> int:
+    lex = [r for r in rules if r["type"] == "LEX"]
+    if not lex:
+        return base_limit
+    payload = lex[0]["payload"]
+    # 노출비율(exposure_ratio)이 한도를 직접 깎지는 않지만, 초과 시 한도 = 0 또는 경고 처리
+    return 0 if exposure_ratio > payload["single_counterparty_limit"] else base_limit
+
+
+def apply_sme_guarantee(
+    base_limit: int, guarantee_ratio: float, rules: list[dict]
+) -> int:
+    g = [r for r in rules if r["type"] == "SME_GUARANTEE"]
+    if not g:
+        return base_limit
+    payload = g[0]["payload"]
+    ratio = min(guarantee_ratio, payload["max_guarantee_ratio"])
+    boosted = int(base_limit * (1 + ratio * 0.5))  # 예시: 보증 85%면 최대 42.5% 가산
+    cap = payload.get("max_guarantee_amount", boosted)
+    return min(boosted, base_limit + cap)
