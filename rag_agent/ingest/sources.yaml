@@ -1,0 +1,16 @@
+sources:
+  - name: fsc_notice
+    type: list
+    urls:
+      - "https://www.fsc.go.kr/no010101/77885"   # 금융위 DSR 보도자료 (예시 URL)
+      - "https://www.fsc.go.kr/no010101/77481"   # 금융위 정책 관련 문서 (예시 URL)
+
+  - name: fss_notice
+    type: list
+    urls:
+      - "https://www.fss.or.kr/fss/kr/promo/bodobbs_view.jsp?seq=12345" # 금감원 보도자료 (예시 URL)
+
+  - name: sample_news
+    type: list
+    urls:
+      - "https://www.hankyung.com/economy/article/2025070100001" # 스트레스 DSR 뉴스 보도 (예시 URL)

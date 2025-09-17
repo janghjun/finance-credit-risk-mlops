@@ -1,0 +1,12 @@
+{
+  "doc_id": "sha16(url)",
+  "url": "...",
+  "status_code": 200,
+  "content_type": "text/html; charset=utf-8",
+  "fetched_at": "2025-09-17T08:00:00Z",
+  "etag": null,
+  "last_modified": null,
+  "sha256": "content_hash",
+  "bytes_path": null,
+  "text": "원문 텍스트(HTML은 본문만)"
+}
