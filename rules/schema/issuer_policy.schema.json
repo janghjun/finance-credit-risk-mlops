@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "IssuerPolicy",
+  "type": "object",
+  "required": ["issuer", "product", "score_band", "policy"],
+  "properties": {
+    "issuer": {"type": "string"},
+    "product": {"type": "string"},
+    "score_band": {"type": "string"},
+    "policy": {
+      "type": "object",
+      "properties": {
+        "max_limit": {"type": "number"},
+        "limit_factor": {"type": "number"},
+        "max_tenor_months": {"type": "integer"},
+        "base_rate_apr": {"type": "number"}
+      },
+      "required": ["max_limit", "limit_factor", "max_tenor_months", "base_rate_apr"]
+    },
+    "source": {"enum": ["real", "simulated"]},
+    "as_of": {"type": "string", "format": "date"}
+  }
+}
