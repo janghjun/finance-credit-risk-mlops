@@ -1,0 +1,5 @@
+issuer,product,segment,rate_type
+BC_CARD,CARD_LOAN_A,personal,variable
+SHINHAN,PERSONAL_LOAN_PLUS,personal,variable
+LOTTE,EZ_CASH,personal,fixed
+KB,KB_FREE_LOAN,personal,variable

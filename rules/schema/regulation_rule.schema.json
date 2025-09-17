@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RegulationRule",
+  "type": "object",
+  "required": ["rule_id", "type", "version", "effective_from", "payload"],
+  "properties": {
+    "rule_id": {"type": "string"},
+    "type": {"enum": ["STRESS_DSR", "LEX"]},
+    "version": {"type": "string"},
+    "effective_from": {"type": "string", "format": "date"},
+    "expires_on": {"type": ["string", "null"], "format": "date"},
+    "payload": {"type": "object"}
+  }
+}

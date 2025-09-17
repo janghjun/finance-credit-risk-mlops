@@ -1,0 +1,6 @@
+{"issuer":"BC_CARD","product":"CARD_LOAN_A","score_band":"A","policy":{"max_limit":45000000,"limit_factor":0.90,"max_tenor_months":60,"base_rate_apr":0.107},"source":"simulated","as_of":"2025-09-01"}
+{"issuer":"SHINHAN","product":"PERSONAL_LOAN_PLUS","score_band":"C","policy":{"max_limit":40000000,"limit_factor":0.75,"max_tenor_months":48,"base_rate_apr":0.123},"source":"simulated","as_of":"2025-09-01"}
+{"issuer":"LOTTE","product":"EZ_CASH","score_band":"B","policy":{"max_limit":30000000,"limit_factor":0.85,"max_tenor_months":36,"base_rate_apr":0.129},"source":"simulated","as_of":"2025-09-01"}
+{"issuer":"KB","product":"KB_FREE_LOAN","score_band":"B","policy":{"max_limit":55000000,"limit_factor":0.82,"max_tenor_months":60,"base_rate_apr":0.112},"source":"simulated","as_of":"2025-09-01"}
+{"issuer":"BC_CARD","product":"CARD_LOAN_A","score_band":"B","policy":{"max_limit":40000000,"limit_factor":0.80,"max_tenor_months":60,"base_rate_apr":0.117},"source":"simulated","as_of":"2025-09-01"}
+{"issuer":"SHINHAN","product":"PERSONAL_LOAN_PLUS","score_band":"B","policy":{"max_limit":50000000,"limit_factor":0.90,"max_tenor_months":60,"base_rate_apr":0.113},"source":"simulated","as_of":"2025-09-01"}
